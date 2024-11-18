@@ -16,13 +16,13 @@ export async function encontrarBoletoRoute(app: FastifyInstance) {
       const { inquilinos } = await encontrarInquilinoService({ imobiliariaId: id, documento })
 
       if (inquilinos.length === 0) {
-        return response.status(400).send('Cliente não encontrado')
+        return response.send({ result: 'Cliente não encontrado' })
       }
 
       const boletos = await encontrarBoletoService({ imobiliariaId: id, documento })
 
       if (boletos.length === 0) {
-        return response.status(400).send('Boleto não encontrado')
+        return response.send({ result: 'Boleto não encontrado' })
       }
 
       const { id: boletoId, data_vencimen, linha_digitavel, valor_doc2 } = boletos[0]
@@ -30,9 +30,9 @@ export async function encontrarBoletoRoute(app: FastifyInstance) {
 
       const valor_brasileiro = Number(valor_doc2).toLocaleString('pt-br', { style: 'currency', currency: 'BRL' })
 
-      response.send({ url, data_vencimen, linha_digitavel, valor: valor_brasileiro })
+      response.send({ url, data_vencimen, linha_digitavel, valor: valor_brasileiro, result: 'ok' })
     } catch (error: any) {
-      response.status(500).send(error.message)
+      response.send({ result: error.message })
     }
   })
 }

@@ -15,14 +15,14 @@ export async function encontrarProprietarioRoute(app: FastifyInstance) {
       const { proprietarios } = await encontrarProprietarioService({ imobiliariaId: id, documento })
 
       if (proprietarios.length === 0) {
-        return response.status(400).send('Proprietario não encontrado')
+        return response.send({ result: 'Proprietario não encontrado' })
       }
 
       const [{ nome_razao }] = proprietarios
 
-      response.send({ nome_razao })
+      response.send({ nome_razao, result: 'ok' })
     } catch (error: any) {
-      response.status(500).send(error.message)
+      response.send({ result: error.message })
     }
   })
 }

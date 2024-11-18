@@ -15,14 +15,14 @@ export async function encontrarInquilinoRoute(app: FastifyInstance) {
       const { inquilinos } = await encontrarInquilinoService({ imobiliariaId: id, documento })
 
       if (inquilinos.length === 0) {
-        return response.status(400).send('Inquilino não encontrado')
+        return response.send({ result: 'Inquilino não encontrado' })
       }
 
       const [{ nome_razao }] = inquilinos
 
-      response.send({ nome_razao })
+      response.send({ nome_razao, result: 'ok' })
     } catch (error: any) {
-      response.status(500).send(error.message)
+      response.send({ result: error.message })
     }
   })
 }

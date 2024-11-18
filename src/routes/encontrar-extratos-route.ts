@@ -17,7 +17,7 @@ export async function encontrarExtratosRoute(app: FastifyInstance) {
       const { extratos } = await encontrarExtratosService({ contrato, documento, imobiliariaId: id })
 
       if (extratos.length === 0) {
-        return response.status(400).send('Extrato não encontrado')
+        return response.send({ result: 'Extrato não encontrado' })
       }
 
       response.send(extratos.map(({ id, deposito, extrato_total, ...contrato }) => {
@@ -25,10 +25,10 @@ export async function encontrarExtratosRoute(app: FastifyInstance) {
         const data_deposito = format(deposito, 'dd/MM/yyyy')
         const valor_total = extrato_total.toLocaleString('pt-br', { style: 'currency', currency: 'BRL' })
 
-        return { ...contrato, id, data_deposito, valor_total, extrato_url }
+        return { ...contrato, id, data_deposito, valor_total, extrato_url, result: 'ok' }
       }))
     } catch (error: any) {
-      return response.status(500).send(error.message)
+      return response.send({ result: error.message })
     }
   })
 

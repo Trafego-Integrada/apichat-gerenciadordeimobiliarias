@@ -15,12 +15,12 @@ export async function encontrarContratosRoute(app: FastifyInstance) {
       const { contratos } = await encontrarContratosService({ documento, imobiliariaId: id })
 
       if (contratos.length === 0) {
-        return response.status(400).send('Contrato não encontrado')
+        return response.send({ result: 'Contrato não encontrado' })
       }
 
-      return response.send(contratos)
+      return response.send({ contratos, result: 'ok' })
     } catch (error: any) {
-      response.status(500).send(error.message)
+      response.send({ result: error.message })
     }
   })
 }
