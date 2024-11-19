@@ -20,13 +20,15 @@ export async function encontrarExtratosRoute(app: FastifyInstance) {
         return response.send({ result: 'Extrato não encontrado' })
       }
 
-      response.send(extratos.map(({ id, deposito, extrato_total, ...contrato }) => {
+      const parcelas = extratos.map(({ id, deposito, extrato_total, ...contrato }) => {
         const extrato_url = process.env.EXTRATO_URL + id
         const data_deposito = format(deposito, 'dd/MM/yyyy')
         const valor_total = extrato_total.toLocaleString('pt-br', { style: 'currency', currency: 'BRL' })
 
-        return { ...contrato, id, data_deposito, valor_total, extrato_url, result: 'ok' }
-      }))
+        return { ...contrato, id, data_deposito, valor_total, extrato_url }
+      })
+
+      response.send({ parcelas, result: 'ok' })
     } catch (error: any) {
       return response.send({ result: error.message })
     }
