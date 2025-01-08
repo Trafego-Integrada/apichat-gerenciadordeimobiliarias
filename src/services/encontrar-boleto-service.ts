@@ -17,7 +17,7 @@ export async function encontrarBoletoService({
       SELECT * FROM trafego_boleto.boleto
       WHERE bols_codl = "${imobiliariaId}"
       AND bols_cpf_cnpj = "${documento}"
-      ORDER BY data_vencimen desc
+      ORDER BY data_hora_insert desc
       LIMIT 1
     `
   )
